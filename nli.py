@@ -46,9 +46,6 @@ def get_nespapers_soup_for_month(date_of_interest: date):
     return BeautifulSoup(html, "html.parser")
 
 
-def isinteresting(paper: str) -> bool:
-    return paper in INTERESTING_NEWSPAPERS
-
 def get_nespaper_links_for_month(date_of_interest: date):
     soup = get_nespapers_soup_for_month(date_of_interest)
     date_elements = soup.find_all(class_="datebrowserrichardmonthlevelcalendardaycellcontents")
