@@ -8,25 +8,31 @@ INTERESTING_NEWSPAPERS = [
     "מעריב", "הארץ", "על המשמר", "כותרת ראשית", "הצפה", "מעריב", "דבר", "הבקר", "למרחב", "קול העם", "חדשות", "כל העיר (ירושלים)"
 ]
 
-INTERESTING_YEARS = list(range(1924, 1987))  # older are hard to read and mostly irrelevant, newer are copyrighted
+INTERESTING_YEARS = list(range(1939, 1987))  # older are hard to read and mostly irrelevant, newer are copyrighted
+
 
 def isinteresting(paper: str) -> bool:
     return paper in INTERESTING_NEWSPAPERS
 
-def get_paper_for_date(date):
+
+def get_random_paper_for_date(date):
     random_year = choice(INTERESTING_YEARS)
     random_date = date.replace(year=random_year)
-
 
     print(f"getting newspapers for: {random_date.date()}")
     papers = get_nespaper_links_for_month(random_date).get(str(random_date.day), {})
 
-    interesting_papers = {
-        paper: BASE_URL + link
-        for paper, link in papers.items()
+    interesting_papers = [{
+            "paper": paper,
+            "link": BASE_URL + link,
+            "date": random_date.date()
+        } for paper, link in papers.items()
         if isinteresting(paper)
-    }
-    pprint(interesting_papers)
+    ]
+    if not interesting_papers:
+        return None
+    return choice(interesting_papers)
+    
     
 if __name__ == "__main__":
     if len(argv) > 1:
@@ -34,5 +40,8 @@ if __name__ == "__main__":
     else:
         date = datetime.now()
 
-
-    get_paper_for_date(date)
+    paper = None
+    while not paper:
+        paper = get_random_paper_for_date(date)
+    
+    pprint((paper['link']))

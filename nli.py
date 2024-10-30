@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-from unicodedata import normalize
 from datetime import date
 
 
@@ -22,9 +21,10 @@ def get_months_soup():
 def isbadchar(c: chr) -> bool:
     return ord(c) > 5100
 
+
 def normalized_text(escaped_string: str) -> str:
     decoded = escaped_string.encode('utf-8').decode('utf-8')
-    return "".join([ f"" if isbadchar(c) else c for c in decoded ]).strip()
+    return "".join(["" if isbadchar(c) else c for c in decoded]).strip()
 
 
 def get_months():
@@ -64,3 +64,10 @@ def get_nespaper_links_for_month(date_of_interest: date):
         if daylink:
             ret[day] = daylink
     return ret
+
+
+def get_titles_for_page(url: str):
+    html = session.get(url, headers=HEADERS).content
+    soup = BeautifulSoup(html, "html.parser")
+    # return soup.prettify()
+    return soup.find_all("script")[14]

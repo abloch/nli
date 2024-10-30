@@ -1,0 +1,14 @@
+{
+    "packages": [
+        "pipenv@latest",
+        "python@3.12"
+    ],
+    "shell": {
+        "init_hook": [
+            "pipenv install --dev"
+        ],
+        "scripts": {
+            "histo": "pipenv run python main.py $*"
+        }
+    }
+}
